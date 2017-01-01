@@ -1,9 +1,16 @@
-from models import GameState, Player
+import random
+
+from models import GameState, Player, BOT
+from settings import PLAYER_NAMES
+
 
 def game_loop():
     game_on = True
     game_state = GameState()
-    game_state.players = [Player() for _ in range(0, 1)]
+    human = Player()
+    human.profile.name = "Human"
+    game_state.players = [human]
+    game_state.players.extend([BOT() for _ in range(0, 3)])
 
     while (game_on and game_state.number_of_cards < 11):  # Rounds
         game_state.deal()
