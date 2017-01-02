@@ -33,14 +33,14 @@ class GameState:  # TODO split into GameState/RoundState/TrickState
             print("{}: {}".format(player, player.score))
         print("**********")
 
-    def _get_best_card(self, card, current_best_card):
+    def _get_best_card(self, card, other_card):
         """
         Assumes cards are of the same color
         """
-        if VALUES.index(card.value) > VALUES.index(current_best_card.value):
+        if VALUES.index(card.value) > VALUES.index(other_card.value):
             return card
         else:
-            return current_best_card
+            return other_card
 
     def get_trick_winner(self):
         super_card_color = self.super_card.color
@@ -160,7 +160,7 @@ class Player:
 
 class BOT(Player):
     def place_bet(self, max_number):
-        self.bet = random.randint(0, max_number + 1)
+        self.bet = random.randint(0, max_number)
         print("{} bet {}".format(self, self.bet))
 
     def _choose_card(self, available_cards):
