@@ -14,9 +14,9 @@ class GameState:  # TODO split into GameState/RoundState/TrickState
     number_of_cards = attr.ib(default=1)
     super_card = attr.ib(default=None)
     trick_color = attr.ib(default=None)
-    played_cards = attr.ib(default=None)
-    tricks_per_player = attr.ib(default=None)
-    players = attr.ib(default=None)
+    played_cards = attr.ib(default=attr.Factory(list))
+    tricks_per_player = attr.ib(default=attr.Factory(list))
+    players = attr.ib(default=attr.Factory(list))
     deck = attr.ib(default=None)
 
     def compute_scores(self):
@@ -55,7 +55,7 @@ class GameState:  # TODO split into GameState/RoundState/TrickState
                 else:
                     current_best_card = card
 
-            else:
+            elif current_best_card.color != super_card_color:  # Else the current card wins
                 if card.color == self.trick_color:
                     if current_best_card.color == self.trick_color:
                         current_best_card = self._get_best_card(card, current_best_card)
@@ -117,7 +117,7 @@ class PlayerProfile:
 class Player:
     profile = attr.ib(default=attr.Factory(PlayerProfile))
     score = attr.ib(default=0)
-    cards = attr.ib(default=None)
+    cards = attr.ib(default=attr.Factory(list))
     bet = attr.ib(default=0)
     human = attr.ib(default=False)
 
@@ -190,6 +190,11 @@ class Deck:
 
     def _shuffle(self):
         random.shuffle(self.cards)
+
+    def pick_card(self, value, color):
+        for i, card in enumerate(self.cards):
+            if card.value == value and card.color == color:
+                return self.cards.pop(i)
 
     def pick(self):
         return self.cards.pop()
