@@ -1,4 +1,5 @@
 import random
+from collections import deque
 
 import attr
 
@@ -16,7 +17,7 @@ class GameState:  # TODO split into GameState/RoundState/TrickState
     trick_color = attr.ib(default=None)
     played_cards = attr.ib(default=attr.Factory(list))
     tricks_per_player = attr.ib(default=attr.Factory(list))
-    players = attr.ib(default=attr.Factory(list))
+    players = attr.ib(default=attr.Factory(deque))
     deck = attr.ib(default=None)
 
     def compute_scores(self):
@@ -85,7 +86,7 @@ class GameState:  # TODO split into GameState/RoundState/TrickState
     def play_trick(self):
         self.trick_color = None
         self.played_cards = []
-        for index, player in enumerate(self.players):
+        for player in self.players:
             chosen_card = player.choose_card(self.trick_color, self.super_card.color)
 
             if self.trick_color is None:
